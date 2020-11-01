@@ -918,7 +918,7 @@ namespace Rampastring.XNAUI.XNAControls
             Y = int.Parse(value);
 
             // Text
-            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Text), Text);
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Text), Text, true);
             Text = value.Replace("@", Environment.NewLine);
 
             if (Parent != null)

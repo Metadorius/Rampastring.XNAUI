@@ -36,7 +36,7 @@ namespace Rampastring.XNAUI
         /// <param name="defaultValue">Value to return if it's not localized.</param>
         /// <param name="memo">Whether to memorize the default value for stub locale file generation.</param>
         /// <returns>A localized string value or <paramref name="defaultValue"/>.</returns>
-        public static string GetLocalizedStringValue(string key, string defaultValue, bool memo = true)
+        public static string GetLocalizedStringValue(string key, string defaultValue, bool memo = false)
         {
             if (localeIni == null)
                 return defaultValue;
@@ -57,7 +57,7 @@ namespace Rampastring.XNAUI
         /// <param name="defaultValue">Value to return if it's not localized.</param>
         /// <param name="memo">Whether to memorize the default value for stub locale file generation.</param>
         /// <returns>A localized string value or <paramref name="defaultValue"/>.</returns>
-        public static string GetLocalizedAttributeValue(string parentName, string controlName, string attribute, string defaultValue, bool memo = true)
+        public static string GetLocalizedAttributeValue(string parentName, string controlName, string attribute, string defaultValue, bool memo = false)
         {
             if (localeIni == null)
                 return defaultValue;
