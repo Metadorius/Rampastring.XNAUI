@@ -787,6 +787,8 @@ namespace Rampastring.XNAUI.XNAControls
                     ParseAttributeFromINI(iniFile, key, iniFile.GetStringValue(Name, key, String.Empty));
             }
 
+            ParseLocalizedAttributes();
+
             IsChangingSize = false;
         }
 
@@ -875,6 +877,65 @@ namespace Rampastring.XNAUI.XNAControls
                             Width, WindowManager.RenderResolutionY - Y - Conversions.IntFromString(value, 0));
                     }
                     return;
+            }
+        }
+
+        /// <summary>
+        /// Looks up and sets a localized
+        /// value for every applicable attribute.
+        /// </summary>
+        public virtual void ParseLocalizedAttributes()
+        {
+            string value, defaultValue;
+
+            // Size
+            defaultValue = $"{X},{Y}";
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, "Size", defaultValue);
+            string[] size = value.Split(',');
+            ClientRectangle = new Rectangle(X, Y,
+                int.Parse(size[0]), int.Parse(size[1]));
+
+            // Width
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Width), $"{Width}");
+            Width = int.Parse(value);
+
+            // Height
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Height), $"{Height}");
+            Height = int.Parse(value);
+
+            // Location
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, "Location", $"{X},{Y}");
+            string[] location = value.Split(',');
+            ClientRectangle = new Rectangle(int.Parse(location[0]), int.Parse(location[1]),
+                Width, Height);
+
+            // X
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(X), $"{X}");
+            X = int.Parse(value);
+
+            // Y
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Y), $"{Y}");
+            Y = int.Parse(value);
+
+            // Text
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Text), Text);
+            Text = value.Replace("@", Environment.NewLine);
+
+            if (Parent != null)
+            {
+                // DistanceFromRightBorder
+                defaultValue = $"{Parent.Width - Width - X}";
+                value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name,
+                    "DistanceFromRightBorder", defaultValue);
+                ClientRectangle = new Rectangle(Parent.Width - Width - Conversions.IntFromString(value, 0), Y,
+                    Width, Height);
+
+                // DistanceFromBottomBorder
+                defaultValue = $"{Parent.Height - Height - Y}";
+                value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name,
+                    "DistanceFromBottomBorder", defaultValue);
+                ClientRectangle = new Rectangle(X, Parent.Height - Height - Conversions.IntFromString(value, 0),
+                    Width, Height);
             }
         }
 
