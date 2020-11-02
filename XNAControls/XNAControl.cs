@@ -886,6 +886,9 @@ namespace Rampastring.XNAUI.XNAControls
         /// </summary>
         public virtual void ParseLocalizedAttributes()
         {
+            if (string.IsNullOrWhiteSpace(Name))
+                return;
+
             string value, defaultValue;
 
             // Size
@@ -918,8 +921,12 @@ namespace Rampastring.XNAUI.XNAControls
             Y = int.Parse(value);
 
             // Text
-            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Text), Text, true);
-            Text = value.Replace("@", Environment.NewLine);
+            if (!string.IsNullOrWhiteSpace(Text))
+            {
+                value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Text),
+                    Text.Replace(Environment.NewLine, "@"), true);
+                Text = value.Replace("@", Environment.NewLine);
+            }
 
             if (Parent != null)
             {
