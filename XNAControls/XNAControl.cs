@@ -787,7 +787,8 @@ namespace Rampastring.XNAUI.XNAControls
                     ParseAttributeFromINI(iniFile, key, iniFile.GetStringValue(Name, key, String.Empty));
             }
 
-            ParseLocalizedAttributes();
+            if (!string.IsNullOrWhiteSpace(Name))
+                ParseLocalizedAttributes();
 
             IsChangingSize = false;
         }
@@ -886,11 +887,9 @@ namespace Rampastring.XNAUI.XNAControls
         /// </summary>
         public virtual void ParseLocalizedAttributes()
         {
-            if (string.IsNullOrWhiteSpace(Name))
-                return;
-
             string value, defaultValue;
 
+            /*
             // Size
             defaultValue = $"{X},{Y}";
             value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, "Size", defaultValue);
@@ -919,15 +918,15 @@ namespace Rampastring.XNAUI.XNAControls
             // Y
             value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Y), $"{Y}");
             Y = int.Parse(value);
+            */
 
             // Text
-            if (!string.IsNullOrWhiteSpace(Text))
-            {
-                value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Text),
-                    Text.Replace(Environment.NewLine, "@"), true);
-                Text = value.Replace("@", Environment.NewLine);
-            }
 
+            value = LocaleProvider.GetLocalizedAttributeValue(Parent?.Name, Name, nameof(Text),
+                Text?.Replace(Environment.NewLine, "@") ?? string.Empty, true);
+            Text = value?.Replace("@", Environment.NewLine) ?? string.Empty;
+
+            /*
             if (Parent != null)
             {
                 // DistanceFromRightBorder
@@ -944,6 +943,7 @@ namespace Rampastring.XNAUI.XNAControls
                 ClientRectangle = new Rectangle(X, Parent.Height - Height - Conversions.IntFromString(value, 0),
                     Width, Height);
             }
+            */
         }
 
         /// <summary>
