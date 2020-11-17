@@ -49,8 +49,14 @@ namespace Rampastring.XNAUI.Input
 
         void DoKeyPress(Keys key)
         {
-            if (OnKeyPressed != null)
-                OnKeyPressed(this, new KeyPressEventArgs(key));
+            Delegate[] delegates = OnKeyPressed.GetInvocationList();
+            var args = new KeyPressEventArgs(key);
+            for (int i = 0; i < delegates.Length; i++)
+            {
+                delegates[i].DynamicInvoke(this, args);
+                if (args.Handled)
+                    return;
+            }
         }
 
         public bool IsKeyHeldDown(Keys key)
@@ -60,8 +66,12 @@ namespace Rampastring.XNAUI.Input
 
         public bool IsCtrlHeldDown()
         {
-            return IsKeyHeldDown(Keys.RightControl) ||
-                        IsKeyHeldDown(Keys.LeftControl);
+            return IsKeyHeldDown(Keys.RightControl) || IsKeyHeldDown(Keys.LeftControl);
+        }
+
+        public bool IsShiftHeldDown()
+        {
+            return IsKeyHeldDown(Keys.RightShift) || IsKeyHeldDown(Keys.LeftShift);
         }
     }
 
@@ -73,5 +83,8 @@ namespace Rampastring.XNAUI.Input
         }
 
         public Keys PressedKey { get; set; }
+
+        // If set, the key press event won't be forwarded on to following subscribers.
+        public bool Handled { get; set; }
     }
 }
